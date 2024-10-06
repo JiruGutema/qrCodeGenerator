@@ -15,6 +15,7 @@ if (!fs.existsSync(folderPath)) {
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(folderPath)); // Serve static files from folderPath
 
 function generateQrCode(req, res, next) {
   const userInput = req.body["userInput"];
@@ -29,6 +30,7 @@ function generateQrCode(req, res, next) {
   qrCode
     .pipe(fs.createWriteStream(qrCodePath))
     .on("finish", () => {
+      console.log("QR code generated successfully.");
       next();
     })
     .on("error", (err) => {
@@ -42,24 +44,13 @@ app.get("/", (req, res) => {
 });
 
 app.post("/result", generateQrCode, (req, res) => {
-  //
-  // const resultHtml = `
-  //   <!DOCTYPE html>
-  //   <html lang="en">
-  //   <head>
-  //       <meta charset="UTF-8">
-  //       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  //       <title>QR Code Result</title>
-  //   </head>
-  //   <body>
-  //       <h1>Your QR Code</h1>
-  //       <img src="/qrGen.png" alt="QR Code" />
-  //       <p><a href="/">Generate another QR code</a></p>
-  //   </body>
-  //   </html>
-  // `;
   const qrCodePath = `${folderPath}/qrGen.png`;
-  res.sendFile(qrCodePath);
+  res.sendFile(qrCodePath, (err) => {
+    if (err) {
+      console.error("Error sending QR code:", err);
+      res.status(err.status).end();
+    }
+  });
 });
 
 app.listen(port, () => {
