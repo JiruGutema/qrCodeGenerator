@@ -7,11 +7,14 @@ import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
-const port = 3500;
+const port = 3502;
+
+// Serve static files from the folder directory
 app.use(express.static("./folder"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-function generateQrCode(req, res) {
+// Function to generate QR code
+function generateQrCode(req, res, next) {
   const userInput = req.body["userInput"];
 
   if (!userInput) {
@@ -19,19 +22,33 @@ function generateQrCode(req, res) {
   }
 
   const qrCode = qr.image(userInput, { type: "png" });
+  const qrCodePath = "./folder/qrGen.png";
 
-  res.setHeader("Content-Type", "image/png");
-  qrCode.pipe(res);
+  // Pipe the QR code to a file
+  const writeStream = fs.createWriteStream(qrCodePath);
+  qrCode.pipe(writeStream);
+
+  writeStream.on("finish", () => {
+    next(); // Proceed to the next middleware
+  });
+
+  writeStream.on("error", (err) => {
+    console.error("Error generating QR code:", err);
+    res.status(500).send("Error generating QR code.");
+  });
 }
 
+// Serve the homepage
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+  res.sendFile(`${__dirname}/index.html`);
 });
 
+// Handle form submission and send the result page
 app.post("/result", generateQrCode, (req, res) => {
-  res.sendFile(__dirname, "folder/result.html");
+  res.sendFile(`${__dirname}/folder/result.html`);
 });
 
+// Start the server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}...`);
 });
