@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 const port = 3500;
-
+app.use(express.static("./folder"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 function generateQrCode(req, res) {
@@ -28,7 +28,9 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-app.post("/result", generateQrCode);
+app.post("/result", generateQrCode, (req, res) => {
+  res.sendFile(__dirname, "folder/result.html");
+});
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}...`);
