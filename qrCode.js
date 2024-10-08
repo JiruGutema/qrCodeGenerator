@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Function to generate QR code
 function generateQrCode(req, res, next) {
   const userInput = req.body["userInput"];
-
+  console.log(userInput);
   if (!userInput) {
     return res.status(400).send("No input provided.");
   }
