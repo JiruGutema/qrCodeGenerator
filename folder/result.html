@@ -7,22 +7,55 @@
     <style>
       body {
         background-color: lightskyblue;
+        margin: 0;
+        padding: 0;
       }
       .main {
         width: auto;
         overflow: hidden;
         margin: auto;
-        margin-top: 30%;
+        margin-top: 20%;
+        margin-bottom: 40px;
       }
       .main img {
         width: fit-content;
       }
+      .download-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: white;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        margin-top: 50px;
+      }
+      .download-btn:hover {
+        background-color: #0056b3;
+      }
+      header {
+        text-align: center;
+        background-color: rgb(143, 136, 132);
+        opacity: 50%;
+        background-image: url(./logo.png);
+        background-size: 150px;
+        background-position: left;
+        background-repeat: no-repeat;
+        font-size: 30px;
+        height: 50px;
+        animation-name: "dots";
+      }
     </style>
   </head>
   <body style="text-align: center">
+    <header></header>
     <div class="main">
-      <img src="./qrGen.png" alt="generated qrcode" />
+      <img src="./GeneratedQrCode.png" alt="generated qrcode" />
     </div>
+    <a href="./GeneratedQrCode.png" download class="download-btn"
+      >Download QR_Code</a
+    >
     <div style="position: absolute; bottom: 0; text-align: center; width: 98%">
       <hr />
       Developed By: Jiru Gutema <br />
