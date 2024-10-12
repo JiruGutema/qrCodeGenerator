@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 // Set up the directory path
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
-const port = 3501;
+const port = 3502;
 const folderPath = `${__dirname}/folder`;
 
 // Create a folder if it doesn't exist
